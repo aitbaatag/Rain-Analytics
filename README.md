@@ -1,38 +1,41 @@
-# Public Transport Analytics 
- This project provides a comprehensive analytics platform for public transport data, enabling detailed insights into transit performance, delays, and usage patterns. Raw data from various sources, including APIs and real-time feeds, is collected and processed to create a structured, clean dataset that supports advanced reporting and analysis.
-
-The project tracks metrics such as average delays, service reliability, and route performance over time, allowing users to identify trends, evaluate system efficiency, and make data-driven decisions. Historical and current data are integrated to offer both real-time insights and long-term performance analysis.
-
-The platform supports automated data workflows, ensuring that new information is continuously incorporated into the analytics layer while maintaining data quality and consistency. The resulting datasets can be used for reporting, visualization, and operational planning to improve public transport services 
-
+# Rain Analytics 
+This project is a data analytics pipeline for rainfall and weather monitoring. It collects, processes, and transforms weather data from APIs and public datasets to provide insights on rainfall patterns, extreme weather events, and trends over time. The goal is to enable data-driven decisions for environmental analysis, agriculture planning, and urban water management 
+ 
 ## project structure 
 ```
-public-transport-analytics/
-├── README.md                 # Project description and instructions
-├── .gitignore                # Git ignore rules
-├── docker-compose.yml        # Containers for Postgres/S3, Airflow, dbt, app
-├── dbt_project/              # dbt project for transformations
-│   ├── models/               # SQL models
-│   │   ├── staging/          # Staging models (raw → clean)
-│   │   ├── marts/            # Business-level models (analytics)
-│   │   └── tests/            # dbt data quality tests
-│   ├── macros/               # dbt macros for reusable SQL
-│   ├── seeds/                # CSV seeds if needed
-│   ├── snapshots/            # Historical snapshots
-│   ├── dbt_project.yml
-│   └── profiles.yml.template
-├── airflow/                  # Airflow DAGs and configs
-│   ├── dags/
-│   │   ├── etl_raw_data.py
-│   │   ├── dbt_transformations.py
-│   │   └── quality_checks.py
-│   ├── plugins/
-│   └── airflow.cfg
-├── src/                      # Custom extraction/loading scripts
-│   ├── extract/              # Pull data from APIs, GPS, ticketing
-│   ├── load/                 # Load data into S3/Postgres landing zone
-│   └── utils/                # Helper functions
-├── tests/                    # Unit/integration tests for Python scripts
-├── requirements.txt          # Python dependencies
-└── .env                      # Environment variables for secrets
+rain-analytics/
+├── README.md
+├── .env                 # API keys, credentials
+├── requirements.txt
+├── Dockerfile           # Optional: container for Airflow + DBT
+├── dags/
+│   ├── all_project_dag.py
+│   ├── extract_weather_dag.py
+│   └── dbt_dag.py
+├── src/
+│   ├── __init__.py
+│   ├── config.yaml
+│   ├── extract/
+│   │   ├── __init__.py
+│   │   └── weather_api.py
+│   ├── load/
+│   │   ├── __init__.py
+│   │   └── loader.py
+│   ├── transform/
+│   │   └── dbt_rain/
+│   │       ├── dbt_project.yml
+│   │       ├── profiles.yml.template
+│   │       ├── models/
+│   │       │   ├── bronze/
+│   │       │   ├── silver/
+│   │       │   └── gold/
+│   │       ├── macros/
+│   │       └── tests/
+│   └── utils.py
+├── data/                # Optional: CSV backups / sample datasets
+└── .github/
+    └── workflows/
+        ├── ci.yaml
+        └── cd.yaml
+
 ``` 
