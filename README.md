@@ -4,38 +4,47 @@ This project is a data analytics pipeline for rainfall and weather monitoring. I
 ## project structure 
 ```
 rain-analytics/
-├── README.md
-├── .env                 # API keys, credentials
-├── requirements.txt
-├── Dockerfile           # Optional: container for Airflow + DBT
-├── dags/
-│   ├── all_project_dag.py
-│   ├── extract_weather_dag.py
-│   └── dbt_dag.py
-├── src/
-│   ├── __init__.py
-│   ├── config.yaml
-│   ├── extract/
-│   │   ├── __init__.py
-│   │   └── weather_api.py
-│   ├── load/
-│   │   ├── __init__.py
-│   │   └── loader.py
-│   ├── transform/
-│   │   └── dbt_rain/
-│   │       ├── dbt_project.yml
-│   │       ├── profiles.yml.template
-│   │       ├── models/
-│   │       │   ├── bronze/
-│   │       │   ├── silver/
-│   │       │   └── gold/
-│   │       ├── macros/
-│   │       └── tests/
-│   └── utils.py
-├── data/                # Optional: CSV backups / sample datasets
-└── .github/
-    └── workflows/
-        ├── ci.yaml
-        └── cd.yaml
+│── README.md
+│── docker-compose.yml        # Orchestrates multiple containers (Airflow + Java ETL + dbt)
+│── .env                      # API keys, credentials
+│
+├── etl-service/              # Java service → fetch weather & upload to S3
+│   ├── pom.xml
+│   ├── Dockerfile
+│   └── src/main/java/com/example/weather/
+│       ├── App.java
+│       ├── config/Config.java
+│       ├── model/WeatherData.java
+│       ├── service/
+│       │   ├── WeatherApiClient.java
+│       │   ├── DataTransformer.java
+│       │   └── S3Uploader.java
+│       └── util/DateUtils.java
+│   └── src/main/resources/cities.json
+│
+├── airflow/                  # Airflow scheduler + DAGs
+│   ├── Dockerfile
+│   ├── dags/
+│   │   ├── all_project_dag.py
+│   │   ├── extract_weather_dag.py
+│   │   └── dbt_dag.py
+│   └── requirements.txt      # Airflow + AWS SDK libs
+│
+├── dbt-transform/            # dbt project container
+│   ├── Dockerfile
+│   ├── dbt_project.yml
+│   ├── profiles.yml.template
+│   ├── models/
+│   │   ├── bronze/
+│   │   ├── silver/
+│   │   └── gold/
+│   ├── macros/
+│   └── tests/
+│
+├── data/                     # Optional: local CSV/JSON backups
+│
+└── .github/workflows/
+    ├── ci.yaml                # Run tests, build JAR, lint dbt
+    └── cd.yaml                # Deploy containers
 
 ``` 
