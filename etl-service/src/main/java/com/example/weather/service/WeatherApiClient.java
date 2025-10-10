@@ -37,7 +37,7 @@ public class WeatherApiClient {
         if (rootNode != null) {
             System.out.println(rootNode.toPrettyString());
         } else {
-            System.out.println("Failed to fetch weather data.");
+            System.out.println("Failed to fetch weather data ");
         }
     }
 }
