@@ -1,0 +1,30 @@
+
+{
+  "location": "42.3478,-71.0466",
+
+  "fields": [
+  "temperature",
+  "temperatureApparent",
+  "temperatureMin",
+  "temperatureMax",
+  "humidity",
+  "pressureSeaLevel",
+  "windSpeed",
+  "windGust",
+  "cloudCover",
+  "precipitationIntensity",
+  "precipitationType",
+  "thunderstormProbability",
+  "visibility",
+  "uvIndex",
+  "weatherCode",
+  "particulateMatter25",
+  "particulateMatter10",
+  "pollutantO3",
+  "epaIndex"],
+  "units": "metric",
+  "timesteps": ["1h"],
+  "startTime": "now",
+  "endTime": "nowPlus6h",
+  "dailyStartHour": 6
+}

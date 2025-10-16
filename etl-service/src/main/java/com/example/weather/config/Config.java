@@ -9,12 +9,10 @@ public class Config {
   public static final String API_KEY = dotenv.get("OPENWEATHER_API_KEY");
   public static final String BASE_URL = dotenv.get("BASE_URL");
 
-  // Default example coordinates (Casablanca)
   public static final double DEFAULT_LAT = 33.5731;
   public static final double DEFAULT_LON = -7.5898;
 
   public static String getUrl() {
-    // https://api.tomorrow.io/v4/timelines?apikey=z1eI6s1cOkWDGAHmRAe6XAdiKyHJKcLv
     return String.format("%s?apikey=%s", BASE_URL, API_KEY);
   }
 }

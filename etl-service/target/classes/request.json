@@ -1,0 +1,10 @@
+
+{
+  "location": "42.3478,-71.0466",
+  "fields": ["temperature"],
+  "units": "metric",
+  "timesteps": ["1h"],
+  "startTime": "now",
+  "endTime": "nowPlus6h",
+  "dailyStartHour": 6
+}

@@ -9,14 +9,35 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+// For reading json files 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class WeatherApiClient {
 
   public void fetchWeatherData(double lat, double lon) {
     // Build URL using Config class
     String apiUrl = Config.getUrl();
+    String jsonRequestBody = "";
+
+    try {
+      jsonRequestBody = Files.readString(Paths.get("src/main/resources/request.json"));
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
 
     HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(apiUrl)).build();
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(
+                URI.create(
+                    "https://api.tomorrow.io/v4/timelines?apikey=z1eI6s1cOkWDGAHmRAe6XAdiKyHJKcLv"))
+            .header("accept", "application/json")
+            // .header("Accept-Encoding", "deflate, gzip, br")
+            .header("content-type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
+            .build();
 
     // Declare rootNode outside try so it can be used after
     JsonNode rootNode = null;
