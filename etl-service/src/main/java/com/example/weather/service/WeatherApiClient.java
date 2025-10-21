@@ -42,6 +42,8 @@ public class WeatherApiClient {
     try {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       rootNode = mapper.readTree(response.body());
+
+
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
