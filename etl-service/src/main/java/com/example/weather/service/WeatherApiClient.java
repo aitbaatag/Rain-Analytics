@@ -22,22 +22,18 @@ public class WeatherApiClient {
 
     try {
       jsonRequestBody = Files.readString(Paths.get("src/main/resources/request.json"));
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
     HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request =
-        HttpRequest.newBuilder()
-            .uri(
-                URI.create(
-                    "https://api.tomorrow.io/v4/timelines?apikey=z1eI6s1cOkWDGAHmRAe6XAdiKyHJKcLv"))
-            .header("accept", "application/json")
-            // .header("Accept-Encoding", "deflate, gzip, br")
-            .header("content-type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
-            .build();
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(
+            URI.create(apiUrl))
+        .header("accept", "application/json")
+        .header("content-type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
+        .build();
 
     // Declare rootNode outside try so it can be used after
     JsonNode rootNode = null;
@@ -46,6 +42,8 @@ public class WeatherApiClient {
     try {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       rootNode = mapper.readTree(response.body());
+
+
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
