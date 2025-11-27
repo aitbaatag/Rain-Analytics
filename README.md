@@ -1,10 +1,10 @@
 # Rain Analytics 
 This project is a data analytics pipeline for rainfall and weather monitoring. It collects, processes, and transforms weather data from APIs and public datasets to provide insights on rainfall patterns, extreme weather events, and trends over time. The goal is to enable data-driven decisions for environmental analysis, agriculture planning, and urban water management 
 
+## ETL Architecture Diagram
+![ETL Architecture](image/ETL_Architecture.png)
+
 # High-Level Architecture
-
-![ETL Architecture](images/ETL_Architecture.png)
-
 ## 1️⃣ Data Sources
 
 * penWeather API – current, historical, and forecast rainfall
