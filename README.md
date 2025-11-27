@@ -3,7 +3,7 @@ This project is a data analytics pipeline for rainfall and weather monitoring. I
 
 # High-Level Architecture
 
-![ETL Architecture](images/ETL_Architecture.svg)
+![ETL Architecture](images/ETL_Architecture.png)
 
 ## 1️⃣ Data Sources
 
