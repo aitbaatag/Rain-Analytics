@@ -8,7 +8,8 @@ public class Config {
 
   // API Information
   public static final String API_KEY = dotenv.get("OPENWEATHER_API_KEY");
-  public static final String BASE_URL = dotenv.get("BASE_URL");
+  public static final String BASE_URL = dotenv.get("BASE_URL"); 
+  public static final String country = System.getenv("COUNTRY"); 
 
   // ------------ Cloud Storage Configuration ------------ 
   // AWS S3 Information
