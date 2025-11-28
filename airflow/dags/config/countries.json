@@ -1,0 +1,43 @@
+{
+  "US": {
+    "Washington_DC": { "lat": 38.9072, "lon": -77.0369 },
+    "New_York": { "lat": 40.7128, "lon": -74.006 },
+    "Los_Angeles": { "lat": 34.0522, "lon": -118.2437 },
+    "Chicago": { "lat": 41.8781, "lon": -87.6298 }
+  },
+
+  "FR": {
+    "Paris": { "lat": 48.8566, "lon": 2.3522 },
+    "Lyon": { "lat": 45.764, "lon": 4.8357 },
+    "Marseille": { "lat": 43.2965, "lon": 5.3698 },
+    "Toulouse": { "lat": 43.6047, "lon": 1.4442 }
+  },
+
+  "MA": {
+    "Rabat": { "lat": 34.0209, "lon": -6.8416 },
+    "Casablanca": { "lat": 33.5731, "lon": -7.5898 },
+    "Marrakech": { "lat": 31.6295, "lon": -7.9811 },
+    "Tangier": { "lat": 35.7595, "lon": -5.834 }
+  },
+
+  "UK": {
+    "London": { "lat": 51.5074, "lon": -0.1278 },
+    "Manchester": { "lat": 53.4808, "lon": -2.2426 },
+    "Birmingham": { "lat": 52.4862, "lon": -1.8904 },
+    "Edinburgh": { "lat": 55.9533, "lon": -3.1883 }
+  },
+
+  "CA": {
+    "Ottawa": { "lat": 45.4215, "lon": -75.6972 },
+    "Toronto": { "lat": 43.651, "lon": -79.347 },
+    "Vancouver": { "lat": 49.2827, "lon": -123.1207 },
+    "Montreal": { "lat": 45.5019, "lon": -73.5674 }
+  },
+
+  "ES": {
+    "Madrid": { "lat": 40.4168, "lon": -3.7038 },
+    "Barcelona": { "lat": 41.3851, "lon": 2.1734 },
+    "Valencia": { "lat": 39.4699, "lon": -0.3763 },
+    "Seville": { "lat": 37.3891, "lon": -5.9845 }
+  }
+}

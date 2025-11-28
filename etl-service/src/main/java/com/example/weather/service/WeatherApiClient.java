@@ -18,13 +18,8 @@ public class WeatherApiClient {
   public void fetchWeatherData(double lat, double lon) {
     // Build URL using Config class
     String apiUrl = Config.getUrl();
-    String jsonRequestBody = "";
+    String jsonRequestBody = Config.getJsonRequestBody();
 
-    try {
-      jsonRequestBody = Files.readString(Paths.get("src/main/resources/request.json"));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
 
     HttpClient client = HttpClient.newHttpClient();
     HttpRequest request = HttpRequest.newBuilder()
