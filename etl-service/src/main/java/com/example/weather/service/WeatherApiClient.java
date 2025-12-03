@@ -30,7 +30,6 @@ public class WeatherApiClient {
         .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
         .build();
 
-    // Declare rootNode outside try so it can be used after
     JsonNode rootNode = null;
     ObjectMapper mapper = new ObjectMapper();
 
