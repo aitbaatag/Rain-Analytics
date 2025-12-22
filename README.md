@@ -70,7 +70,6 @@ Gold | Aggregated metrics | Snowflake tables, ready for analysis
 6. Gold tables are ready for visualization or reporting
 
 ## data model architecture
-![alt text](https://github.com/aitbaatag/Rain-Analytics/blob/main/image/data_architecture.png?raw=true)
 ## project structure 
 ```
 rain-analytics/
