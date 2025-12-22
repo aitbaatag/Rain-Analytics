@@ -69,7 +69,30 @@ Gold | Aggregated metrics | Snowflake tables, ready for analysis
 5. DBT / Great Expectations run data quality checks
 6. Gold tables are ready for visualization or reporting
 
-## data model architecture
+## data model architecture 
+``` lua
++----------------+       +----------------+       +----------------+
+|    Country     | 1 ──< |      City      | 1 ──< |    RainData    |
++----------------+       +----------------+       +----------------+
+| country_id (PK)|       | city_id (PK)   |       | rain_id (PK)   |
+| country_name   |       | city_name      |       | city_id (FK)   |
+| iso_code       |       | country_id (FK)|       | date           |
++----------------+       | latitude       |       | daily_rain_mm  |
+                         | longitude      |       | source         |
+                         | is_official    |       | created_at     |
+                         +----------------+       +----------------+
+                                                      \
+                                                       \
+                                                        > AggregatedMetrics
+                                                          +----------------+
+                                                          | metric_id (PK) |
+                                                          | city_id (FK)   |
+                                                          | date           |
+                                                          | avg_daily_rain |
+                                                          | country_avg_rain |
+                                                          | created_at     |
+                                                          +----------------+
+```
 ## project structure 
 ```
 rain-analytics/
