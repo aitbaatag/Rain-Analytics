@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y maven && \
     rm -rf /var/lib/apt/lists/* 
 
 # Runtime stage
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 

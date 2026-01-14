@@ -4,72 +4,89 @@ This project is a data analytics pipeline for rainfall and weather monitoring. I
 ## ETL Architecture Diagram
 ![ETL Architecture](image/ETL_Architecture.png)
 
+## DAG Workflow
+The weather data pipeline DAG fetches weather data for 24 cities across 6 countries (US, FR, MA, UK, CA, ES). It runs daily at 2 AM with a maximum of 3 parallel tasks to respect API rate limits (3 req/sec, 25 req/hour, 500 req/day).
+
+![DAG](image/dag.png)
+
 # High-Level Architecture
 ## 1️⃣ Data Sources
 
-* penWeather API – current, historical, and forecast rainfall
-* Meteostat / NOAA / Historical CSV datasets – optional backups for testing
-* Optional IoT sensors – local rainfall measurements
+* **OpenWeather API** – Current, historical, and forecast rainfall data
+* **Meteostat / NOAA** – Historical CSV datasets (optional backups for testing)
+* **IoT Sensors** – Local rainfall measurements (optional)
 
 ## 2️⃣ Raw Layer (Landing Zone)
 
-* Collect raw JSON/CSV data from APIs or historical datasets.
-* Store unmodified data for traceability.
-* Storage options:
-    * AWS S3 (recommended for production)
-    * Temporary Postgres/SQLite (for local testing)
+* **Purpose**: Store unmodified raw data for traceability and reproducibility
+* **Format**: JSON/CSV from APIs and historical datasets
+* **Storage**:
+    * **AWS S3** – Production (recommended)
+    * **Local Storage** – Development and testing
 
 ## 3️⃣ ETL / Ingestion Service
 
-* Java ETL service (etl-service/)
-    * Fetch data from APIs
-    * Transform minimal fields (e.g., timestamps, units)
-    * Upload raw data to S3 / warehouse staging tables
+**Java ETL Service** (`etl-service/`)
 
-* Key modules:
+**Responsibilities**:
+* Fetch weather data from OpenWeather API
+* Apply minimal transformations (timestamps, unit conversions)
+* Upload raw data to AWS S3
 
-    * WeatherApiClient.java – fetch data
-    * DataTransformer.java – basic transformations
-    * S3Uploader.java – upload raw data
-    * Config.java – environment variables & API keys
+**Key Components**:
+* `WeatherApiClient.java` – API data fetching
+* `DataTransformer.java` – Basic transformations
+* `S3Uploader.java` – S3 data upload
+* `Config.java` – Environment configuration
 
 ## 4️⃣ Orchestration Layer
 
-* Apache Airflow (airflow/)
-    * DAGs to run daily/weekly pipelines
-    * Trigger Java ETL service → load to raw layer
-    * Trigger DBT transformations
-    * Run data quality checks
-    * Send alerts / notifications
+**Apache Airflow** (`airflow/`)
 
-## 5️⃣ Transformation Layer (DBT) (dbt-transform/)
+**DAG**: `weather_data_pipeline`
+* **Schedule**: Daily at 2:00 AM
+* **Tasks**: 24 parallel tasks (one per city)
+* **Rate Limiting**: Max 3 concurrent tasks (respects API limits: 3 req/sec, 25 req/hour, 500 req/day)
+* **Pool**: `weather_api_pool` for resource management
 
-* Medallion Architecture:
+**Workflow**:
+1. Trigger Java ETL service via Docker containers
+2. Fetch weather data for all configured cities
+3. Upload raw data to S3
+4. Trigger DBT transformations (planned)
+5. Run data quality checks (planned)
 
-| Layer | Description | Storage / Materialization |
-|---|---|---|
-Bronze | Raw API data | JSON / Snowflake staging tables
-Silver | Cleaned & standardized | Snowflake views / tables
-Gold | Aggregated metrics | Snowflake tables, ready for analysis
+## 5️⃣ Transformation Layer
+
+**DBT** (`dbt-transform/`) - Medallion Architecture
+
+| Layer | Description | Materialization |
+|-------|-------------|----------------|
+| **Bronze** | Raw API data as-is | Staging tables |
+| **Silver** | Cleaned, standardized, and validated | Views/Tables |
+| **Gold** | Aggregated metrics and analytics-ready datasets | Tables |
 
 ## 6️⃣ Serving Layer / Visualization
 
-* BI tools: PowerBI, Tableau, Metabase
-* Dashboards:
-    * Heatmaps per city
-    * Rainfall trends per month/year
-    * Extreme events timeline
+**BI Tools**: PowerBI, Tableau, Metabase
 
-## 7️⃣ Workflow Summary
+**Dashboards**:
+* City-level rainfall heatmaps
+* Monthly/yearly rainfall trends
+* Extreme weather events timeline
+* Country-level comparisons
 
-1. Airflow triggers extract_weather_dag
-2. Java ETL service fetches data → uploads raw JSON to S3
-3. Airflow triggers dbt_dag
-4. DBT executes transformations (Bronze → Silver → Gold)
-5. DBT / Great Expectations run data quality checks
-6. Gold tables are ready for visualization or reporting
+## 7️⃣ End-to-End Workflow
 
-## data model architecture 
+1. **Airflow** triggers `weather_data_pipeline` DAG (daily at 2 AM)
+2. **Java ETL** service runs in Docker containers (24 tasks, max 3 parallel)
+3. Each task fetches weather data for one city via OpenWeather API
+4. Raw JSON data uploaded to **AWS S3**
+5. **DBT** transformations execute (Bronze → Silver → Gold)
+6. Data quality checks validate transformed data
+7. **Gold tables** ready for BI tools and reporting
+
+## Data Model Architecture 
 ``` lua
 +----------------+       +----------------+       +----------------+
 |    Country     | 1 ──< |      City      | 1 ──< |    RainData    |
@@ -93,7 +110,7 @@ Gold | Aggregated metrics | Snowflake tables, ready for analysis
                                                           | created_at     |
                                                           +----------------+
 ```
-## project structure 
+## Project Structure 
 ```
 rain-analytics/
 │── README.md
@@ -114,13 +131,17 @@ rain-analytics/
 │       └── util/DateUtils.java
 │   └── src/main/resources/cities.json
 │
-├── airflow/                  
-│   ├── Dockerfile
+├── airflow/                  # Apache Airflow orchestration
+│   ├── docker-compose.yaml
+│   ├── config/
+│   │   └── airflow.cfg
 │   ├── dags/
-│   │   ├── all_project_dag.py
-│   │   ├── extract_weather_dag.py
-│   │   └── dbt_dag.py
-│   └── requirements.txt
+│   │   ├── weather_data_pipeline.py
+│   │   └── config/
+│   │       └── countries.json   # 24 cities across 6 countries
+│   ├── logs/
+│   ├── plugins/
+│   └── my-dags/
 │
 ├── dbt-transform/            
 │   ├── Dockerfile
