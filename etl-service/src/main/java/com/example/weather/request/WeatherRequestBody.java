@@ -20,7 +20,7 @@ public class WeatherRequestBody {
             "units", "metric",
             "timesteps", List.of("1h"),
             "startTime", "now",
-            "endTime", "nowPlus6h",
+            "endTime", "nowPlus24h",
             "dailyStartHour", 6
         );
     }

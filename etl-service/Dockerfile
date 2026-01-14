@@ -1,22 +1,24 @@
-# Build
+# Build stage
 FROM eclipse-temurin:17-jdk AS builder 
 
-WORKDIR /etl 
+WORKDIR /build 
 
-COPY ./pom.xml ./ 
-COPY ./src ./src 
+COPY pom.xml .
+COPY src ./src 
 
+RUN apt-get update && apt-get install -y maven && \
+    mvn clean package -DskipTests && \
+    rm -rf /var/lib/apt/lists/* 
 
-RUN apt-get update && apt-get install -y \ 
-    maven && mvn clean package -DskipTests \
-    && rm -rf /var/lib/apt/lists/* 
+# Runtime stage
+FROM eclipse-temurin:17-jre-alpine
 
-# Runtime
-FROM eclipse-temurin:17-jre 
+WORKDIR /app
 
-WORKDIR /etl 
+COPY --from=builder /build/target/etl-service-1.0-SNAPSHOT.jar /app/etl-service.jar
 
-COPY --from=builder /etl/target/*.jar ./etl.jar 
+COPY .env /app/.env
 
-CMD ["java", "-jar", "etl.jar"] 
+CMD ["java", "-jar", "/app/etl-service.jar"]
+ 
 
